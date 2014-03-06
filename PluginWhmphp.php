@@ -214,19 +214,19 @@ Class PluginWhmphp extends ServerPlugin {
         if (strlen($args['package']['username']) > 8) {
             $args['package']['username'] = mb_substr($args['package']['username'], 0, 8);
         }
-	else if ( strlen(trim($args['package']['username'])) <= 0 ) {
-            $errors[] = 'The cPanel username is blank.';
-	}
-	else if ( strlen(trim($args['package']['password'])) <= 0 ) {
-            $errors[] = 'The cPanel password is blank';
-	}
+        else if ( strlen(trim($args['package']['username'])) <= 0 ) {
+                  $errors[] = 'The cPanel username is blank.';
+        }
+        else if ( strlen(trim($args['package']['password'])) <= 0 ) {
+                  $errors[] = 'The cPanel password is blank';
+        }
 
-	// Only make the request if there have been no errors so far.
-	if ( count($errors) == 0 ) {
-            if (strpos($args['package']['password'], $args['package']['username']) !== false) {
-                $errors[] = 'Domain password can\'t contain domain username';
-            }
-	}
+        // Only make the request if there have been no errors so far.
+        if ( count($errors) == 0 ) {
+                  if (strpos($args['package']['password'], $args['package']['username']) !== false) {
+                      $errors[] = 'Domain password can\'t contain domain username';
+                  }
+        }
 
         // Check if we want to supress errors during signup and just return a valid username
         if(isset($args['noError'])) {
