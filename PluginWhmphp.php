@@ -283,9 +283,9 @@ Class PluginWhmphp extends ServerPlugin {
             throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
         }
         $username = $args['package']['username'] ;
-        $request = "/frontend/$theme/master/api.php?type=json&action=unsuspendreseller&username=$username";
+        $request = "/cgi/whmphp/master/index.cgi?page=api&action=unsuspendreseller&username=$username";
 
-        $response = $this->makeRequest('cpanel', $request);
+        $response = $this->makeRequest('whm', $request);
 
         if ( $response->status != 1 ) {
             $errors[] = $this->email_error('UnSuspension', $response->statusmsg, $args);
@@ -307,9 +307,9 @@ Class PluginWhmphp extends ServerPlugin {
             throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
         }
         $username = $args['package']['username'];
-        $request = "/frontend/$theme/master/api.php?type=json&action=suspendreseller&username=$username";
+        $request = "/cgi/whmphp/master/index.cgi?page=api&action=suspendreseller&username=$username";
 
-        $response = $this->makeRequest('cpanel', $request);
+        $response = $this->makeRequest('whm', $request);
 
         if ( $response->status != 1 ) {
             $errors[] = $this->email_error('Suspension', $response->statusmsg, $args);
@@ -332,9 +332,9 @@ Class PluginWhmphp extends ServerPlugin {
             throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
         }
         $username = $args['package']['username'] ;
-        $request = "/frontend/$theme/master/api.php?type=json&action=terminatereseller&username=$username";
+        $request = "/cgi/whmphp/master/index.cgi?page=api&action=terminatereseller&username=$username";
 
-        $response = $this->makeRequest('cpanel', $request);
+        $response = $this->makeRequest('whm', $request);
 
         if ( $response->status != 1 ) {
             $errors[] = $this->email_error('Delete', $response->statusmsg, $args);
@@ -361,9 +361,9 @@ Class PluginWhmphp extends ServerPlugin {
         $username = $args['package']['username'];
         $email = $args['customer']['email'];
         $password = $args['package']['password'];
-        $request = "/frontend/$theme/master/api.php?type=json&action=createreseller&domain=$domain&username=$username&email=$email&password=$password&package=$package";
+        $request = "/cgi/whmphp/master/index.cgi?page=api&action=createreseller&domain=$domain&username=$username&email=$email&password=$password&package=$package";
 
-        $response = $this->makeRequest('cpanel', $request);
+        $response = $this->makeRequest('whm', $request);
         if ( $response->status != 1 ) {
             $errors[] = $this->email_error('Creation', $response->statusmsg, $args);
         }
@@ -377,9 +377,9 @@ Class PluginWhmphp extends ServerPlugin {
                 $ns2 = $args['server']['nameservers'][1]['hostname'];
                 $oversellDisk = ( strtolower($args['package']['acl']['acl_diskspace']) == 'yes') ? 1 : 0;
                 $overSellBandwidth = ( strtolower($args['package']['acl']['acl_diskspace']) == 'yes' ) ? 1 : 0;
-                $request = "/frontend/$theme/master/api.php?type=json&action=setlimit&username=$username&disk=$diskspace&band=$bandwidth&limit=$limit&ns1=$ns1&ns2=$ns2&oversell_disk=$oversellDisk&oversell_bw=$overSellBandwidth";
+                $request = "/cgi/whmphp/master/index.cgi?page=api&action=setlimit&username=$username&disk=$diskspace&band=$bandwidth&limit=$limit&ns1=$ns1&ns2=$ns2&oversell_disk=$oversellDisk&oversell_bw=$overSellBandwidth";
 
-                $response = $this->makeRequest('cpanel', $request);
+                $response = $this->makeRequest('whm', $request);
                 if ( $response->status != 1 ) {
                     $errors[] = $this->email_error('Creation', $response->statusmsg, $args);
                 }
