@@ -69,102 +69,102 @@ Class PluginWhmphp extends ServerPlugin {
     function getVariables() {
 
         $variables = array (
-            /*T*/"Name"/*/T*/ => array (
+            lang("Name") => array (
                 "type"=>"hidden",
                 "description"=>"Used by CE to show plugin - must match how you call the action function names",
                 "value"=>"WHMPHP"
             ),
-            /*T*/"Description"/*/T*/ => array (
+            lang("Description") => array (
                 "type"=>"hidden",
-                "description"=>/*T*/"Description viewable by admin in server settings"/*/T*/,
-                "value"=>/*T*/"WHMPHP control panel integration"/*/T*/
+                "description"=>lang("Description viewable by admin in server settings"),
+                "value"=>lang("WHMPHP control panel integration")
             ),
-            /*T*/"Username"/*/T*/ => array (
+            lang("Username") => array (
                 "type"=>"text",
-                "description"=>/*T*/"Reseller Username"/*/T*/,
+                "description"=>lang("Reseller Username"),
                 "value"=>"",
                 "encryptable"=>false
             ),
-            /*T*/"Password"/*/T*/ => array (
+            lang("Password") => array (
                 "type"=>"password",
-                "description"=>/*T*/"Reseller Password"/*/T*/,
+                "description"=>lang("Reseller Password"),
                 "value"=>"",
                 "encryptable"=>true
             ),
-            /*T*/"Failure E-mail"/*/T*/ => array (
+            lang("Failure E-mail") => array (
                 "type"=>"text",
-                "description"=>/*T*/"E-mail address Virualmin error messages will be sent to"/*/T*/,
+                "description"=>lang("E-mail address Virualmin error messages will be sent to"),
                 "value"=>""
             ),
-            /*T*/"Actions"/*/T*/ => array (
+            lang("Actions") => array (
                 "type"=>"hidden",
-                "description"=>/*T*/"Current actions that are active for this plugin per server"/*/T*/,
+                "description"=>lang("Current actions that are active for this plugin per server"),
                 "value"=>"Create,Delete,Suspend,UnSuspend"
             ),
-            /*T*/"reseller"/*/T*/ => array (
+            lang("reseller") => array (
                 "type"=>"hidden",
-                "description"=>/*T*/"Whether this server plugin can set reseller accounts"/*/T*/,
+                "description"=>lang("Whether this server plugin can set reseller accounts"),
                 "value"=>"1",
             ),
-              /*T*/"disable_reseller_checkbox"/*/T*/ => array (
+              lang("disable_reseller_checkbox") => array (
                 "type"=>"hidden",
-                "description"=>/*T*/"Remove Is Reseller Checkbox?"/*/T*/,
+                "description"=>lang("Remove Is Reseller Checkbox?"),
                 "value"=>"1",
             ),
-            /*T*/'reseller-fieldset'/*/T*/  => array(
+            lang('reseller-fieldset')  => array(
                 'type'          => 'fieldset',
                 'name'          => 'reseller-fieldset',
-                'label'   => /*T*/'Account Specific Fields'/*/T*/,
-                'description'   => /*T*/''/*/T*/,
+                'label'   => lang('Account Specific Fields'),
+                'description'   => '',
                 'value'         => '1',
             ),
-            /*T*/"package_addons"/*/T*/ => array (
+            lang("package_addons") => array (
                 "type"=>"hidden",
-                "description"=>/*T*/"Supported signup addons variables"/*/T*/,
+                "description"=>lang("Supported signup addons variables"),
                 "value"=>"",
             ),
-            /*T*/'package_vars'/*/T*/  => array(
+            lang('package_vars')  => array(
                 'type'            => 'hidden',
-                'description'     => /*T*/'Whether package settings are set'/*/T*/,
+                'description'     => lang('Whether package settings are set'),
                 'value'           => '0',
             ),
-            /*T*/'reseller_acl_fields'/*/T*/ => array(
+            lang('reseller_acl_fields') => array(
                 'type'          => 'hidden',
-                'description'   => /*T*/'ACL field for reseller account'/*/T*/,
+                'description'   => lang('ACL field for reseller account'),
                 'value'         => array(
                     array(
                         'name' => 'acl_diskspace',
                         'type' => 'text',
                         'label' => 'Disk Space',
-                        'description' => /*T*/'Disk Space in MB for this account.'/*/T*/,
+                        'description' => lang('Disk Space in MB for this account.'),
                         'belongsto' => 'reseller-fieldset'
                     ),
                     array(
                         'name' => 'acl_bandwidth',
                         'type' => 'text',
                         'label' => 'Bandwidth',
-                        'description' => /*T*/'Bandwidth in MB for this account.'/*/T*/,
+                        'description' => lang('Bandwidth in MB for this account.'),
                         'belongsto' => 'reseller-fieldset'
                     ),
                     array(
                         'name' => 'acl_limit',
                         'type' => 'text',
                         'label' => 'Limit Reseller By Number',
-                        'description' => /*T*/'Enter the maxiumum number of accounts allowed under this reseller.'/*/T*/,
+                        'description' => lang('Enter the maxiumum number of accounts allowed under this reseller.'),
                         'belongsto' => 'reseller-fieldset'
                     ),
                     array(
                         'name' => 'acl_diskspace-overselling',
                         'type' => 'yesno',
                         'label' => 'Allow Disk Space Overselling?',
-                        'description' => /*T*/''/*/T*/,
+                        'description' => '',
                         'belongsto' => 'reseller-fieldset'
                     ),
                     array(
                         'name' => 'acl_bandwidth-overselling',
                         'type' => 'yesno',
                         'label' => 'Allow Bandwidth Overselling?',
-                        'description' => /*T*/''/*/T*/,
+                        'description' => '',
                         'belongsto' => 'reseller-fieldset'
                     ),
                 )
