@@ -150,7 +150,7 @@ Class PluginWhmphp extends ServerPlugin {
                         'name' => 'acl_limit',
                         'type' => 'text',
                         'label' => 'Limit Reseller By Number',
-                        'description' => lang('Enter the maxiumum number of accounts allowed under this reseller.'),
+                        'description' => lang('Enter the maximum number of accounts allowed under this reseller.'),
                         'belongsto' => 'reseller-fieldset'
                     ),
                     array(
@@ -280,7 +280,7 @@ Class PluginWhmphp extends ServerPlugin {
 
         $theme = $this->getTheme($this->username);
         if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
+            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
         }
         $username = $args['package']['username'] ;
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=unsuspendreseller&username=$username";
@@ -304,7 +304,7 @@ Class PluginWhmphp extends ServerPlugin {
 
         $theme = $this->getTheme($this->username);
         if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
+            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
         }
         $username = $args['package']['username'];
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=suspendreseller&username=$username";
@@ -329,7 +329,7 @@ Class PluginWhmphp extends ServerPlugin {
 
         $theme = $this->getTheme($this->username);
         if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
+            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
         }
         $username = $args['package']['username'] ;
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=terminatereseller&username=$username";
@@ -354,7 +354,7 @@ Class PluginWhmphp extends ServerPlugin {
 
         $theme = $this->getTheme($this->username);
         if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
+            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
         }
         $package = rawurlencode($args['package']['name_on_server']);
         $domain = $args['package']['domain_name'];
@@ -403,7 +403,7 @@ Class PluginWhmphp extends ServerPlugin {
         try {
             $theme = $this->getTheme($this->username);
             if(!$theme)  {
-                throw new CE_Exception('Unable to get the cPanel theme. Please check the the reseller owns his main account');
+                throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
             }
             $request = "/frontend/$theme/master/api.php?type=json&action=listresellers";
 
