@@ -38,7 +38,7 @@ Class PluginWhmphp extends ServerPlugin {
         }
 
         if ( !isset($args['package']['acl']['acl_diskspace']) || !isset($args['package']['acl']['acl_bandwidth']) || !isset($args['package']['acl']['acl_limit']) ) {
-            throw new CE_Exception('Package Diskspace, Bandwidth and Limit are required.');
+			throw new CE_Exception('Package Diskspace, Bandwidth and Limit are required.');
         }
         return;
 
@@ -126,7 +126,7 @@ Class PluginWhmphp extends ServerPlugin {
             lang('package_vars')  => array(
                 'type'            => 'hidden',
                 'description'     => lang('Whether package settings are set'),
-                'value'           => '0',
+                'value'           => '1',
             ),
             lang('reseller_acl_fields') => array(
                 'type'          => 'hidden',
@@ -394,38 +394,6 @@ Class PluginWhmphp extends ServerPlugin {
         return;
     }
 
-    /*
-    function getAvailableActions($userPackage)
-    {
-        $args = $this->buildParams($userPackage);
-        $this->setup($args);
-        $actions = array();
-        try {
-            $theme = $this->getTheme($this->username);
-            if(!$theme)  {
-                throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
-            }
-            $request = "/frontend/$theme/master/api.php?type=json&action=listresellers";
-
-            $response = $this->makeRequest('cpanel', $request);
-
-            CE_Lib::log(2, print_r($response, true));
-            return $actions;
-
-
-
-            $actions[] = 'Delete';
-            if ( $response->acct[0]->suspended == 1 ) {
-                $actions[] = 'UnSuspend';
-            } else {
-                $actions[] = 'Suspend';
-            }
-        } catch (Exception $e) {
-            $actions[] = 'Create';
-        }
-        return $actions;
-    }*/
-
     function makeRequest($type, $request)
     {
         $port = ($type == 'whm') ? 2087 : 2083;
@@ -457,9 +425,13 @@ Class PluginWhmphp extends ServerPlugin {
         return $response;
     }
 
+	function getAccountSummary($user) {
+		$response = $this->makeRequest('whm', '/json-api/accountsummary?user=' . $user);
+        return $response;
+	}
+	
     function getTheme($user) {
-        $response = $this->makeRequest('whm', '/json-api/accountsummary?user=' . $user);
+        $response = $this->makeRequest('whm', '/json-api/accountsummary?user=' . $user);		
         return $response->acct[0]->theme;
-
     }
 }
