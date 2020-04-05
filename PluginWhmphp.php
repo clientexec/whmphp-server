@@ -12,7 +12,8 @@ require_once 'modules/admin/models/ServerPlugin.php';
 * @email matt@clientexec.com
 */
 
-Class PluginWhmphp extends ServerPlugin {
+class PluginWhmphp extends ServerPlugin
+{
 
     public $features = array(
         'packageName' => true,
@@ -24,8 +25,9 @@ Class PluginWhmphp extends ServerPlugin {
     var $username;
     var $password;
 
-    function setup ( $args ) {
-        if ( isset($args['server']['variables']['ServerHostName']) && isset($args['server']['variables']['plugin_whmphp_Username']) && isset($args['server']['variables']['plugin_whmphp_Password']) ) {
+    function setup($args)
+    {
+        if (isset($args['server']['variables']['ServerHostName']) && isset($args['server']['variables']['plugin_whmphp_Username']) && isset($args['server']['variables']['plugin_whmphp_Password'])) {
             $this->host = $args['server']['variables']['ServerHostName'];
             $this->username = $args['server']['variables']['plugin_whmphp_Username'];
             $this->password = $args['server']['variables']['plugin_whmphp_Password'];
@@ -33,40 +35,43 @@ Class PluginWhmphp extends ServerPlugin {
             throw new CE_Exception("Missing Server Credentials: please fill out all information when editing the server.");
         }
 
-        if ( !isset($args['server']['nameservers'][0]['hostname']) || !isset($args['server']['nameservers'][1]['hostname']) ) {
+        if (!isset($args['server']['nameservers'][0]['hostname']) || !isset($args['server']['nameservers'][1]['hostname'])) {
             throw new CE_Exception('No nameservers are defined for this server.');
         }
 
-        if ( !isset($args['package']['acl']['acl_diskspace']) || !isset($args['package']['acl']['acl_bandwidth']) || !isset($args['package']['acl']['acl_limit']) ) {
-			throw new CE_Exception('Package Diskspace, Bandwidth and Limit are required.');
+        if (!isset($args['package']['acl']['acl_diskspace']) || !isset($args['package']['acl']['acl_bandwidth']) || !isset($args['package']['acl']['acl_limit'])) {
+            throw new CE_Exception('Package Diskspace, Bandwidth and Limit are required.');
         }
         return;
-
     }
 
-    function email_error ( $name, $message, $params, $args ) {
+    function email_error($name, $message, $params, $args)
+    {
         $error = "WHMPHP Account " .$name." Failed. ";
         $error .= "An email with the Details was sent to ". $args['server']['variables']['plugin_whmphp_Failure_E-mail'].'<br /><br />';
 
-        if ( is_array($message) ) {
-            $message = implode ( "\n", trim($message) );
+        if (is_array($message)) {
+            $message = implode("\n", trim($message));
         }
 
         CE_Lib::log(1, 'WHMPHP Error: '.print_r(array('type' => $name, 'error' => $error, 'message' => $message, 'params' => $params, 'args' => $args), true));
 
-        if ( !empty($args['server']['variables']['plugin_whmphp_Failure_E-mail']) ) {
+        if (!empty($args['server']['variables']['plugin_whmphp_Failure_E-mail'])) {
             $mailGateway = new NE_MailGateway();
-            $mailGateway->mailMessageEmail( $message,
-            $args['server']['variables']['plugin_whmphp_Failure_E-mail'],
-            "WHMPHP Plugin",
-            $args['server']['variables']['plugin_whmphp_Failure_E-mail'],
-            "",
-            "WHMPHP Account ".$name." Failure");
+            $mailGateway->mailMessageEmail(
+                $message,
+                $args['server']['variables']['plugin_whmphp_Failure_E-mail'],
+                "WHMPHP Plugin",
+                $args['server']['variables']['plugin_whmphp_Failure_E-mail'],
+                "",
+                "WHMPHP Account ".$name." Failure"
+            );
         }
         return $error.nl2br($message);
     }
 
-    function getVariables() {
+    function getVariables()
+    {
 
         $variables = array (
             lang("Name") => array (
@@ -218,144 +223,134 @@ Class PluginWhmphp extends ServerPlugin {
         // Username cannot be greater than 8 characters
         if (strlen($args['package']['username']) > 8) {
             $args['package']['username'] = mb_substr($args['package']['username'], 0, 8);
-        }
-        else if ( strlen(trim($args['package']['username'])) <= 0 ) {
+        } elseif (strlen(trim($args['package']['username'])) <= 0) {
                   $errors[] = 'The cPanel username is blank.';
-        }
-        else if ( strlen(trim($args['package']['password'])) <= 0 ) {
+        } elseif (strlen(trim($args['package']['password'])) <= 0) {
                   $errors[] = 'The cPanel password is blank';
         }
 
         // Only make the request if there have been no errors so far.
-        if ( count($errors) == 0 ) {
-                  if (strpos($args['package']['password'], $args['package']['username']) !== false) {
-                      $errors[] = 'Domain password can\'t contain domain username';
-                  }
+        if (count($errors) == 0) {
+            if (strpos($args['package']['password'], $args['package']['username']) !== false) {
+                $errors[] = 'Domain password can\'t contain domain username';
+            }
         }
 
         // Check if we want to supress errors during signup and just return a valid username
-        if(isset($args['noError'])) {
+        if (isset($args['noError'])) {
             return $args['package']['username'];
         } else {
-
-            if ( count($errors) > 0 ) {
-                CE_Lib::log(4, "plugin_cpanel::validate::error: ".print_r($errors,true));
+            if (count($errors) > 0) {
+                CE_Lib::log(4, "plugin_cpanel::validate::error: ".print_r($errors, true));
                 throw new CE_Exception($errors[0]);
             }
             return $args['package']['username'];
         }
     }
 
-    function doDelete($args) {
+    function doDelete($args)
+    {
         $userPackage = new UserPackage($args['userPackageId']);
         $args = $this->buildParams($userPackage);
         $this->delete($args);
         return $userPackage->getCustomField("Domain Name") . ' has been deleted.';
     }
 
-    function doCreate($args) {
+    function doCreate($args)
+    {
         $userPackage = new UserPackage($args['userPackageId']);
         $args = $this->buildParams($userPackage);
         $this->create($args);
         return $userPackage->getCustomField("Domain Name") . ' has been created.';
     }
 
-    function doSuspend($args) {
+    function doSuspend($args)
+    {
         $userPackage = new UserPackage($args['userPackageId']);
         $args = $this->buildParams($userPackage);
         $this->suspend($args);
         return $userPackage->getCustomField("Domain Name") . ' has been suspended.';
     }
 
-    function doUnSuspend($args) {
+    function doUnSuspend($args)
+    {
         $userPackage = new UserPackage($args['userPackageId']);
         $args = $this->buildParams($userPackage);
         $this->unsuspend($args);
         return $userPackage->getCustomField("Domain Name") . ' has been unsuspended.';
     }
 
-    function unsuspend($args) {
+    function unsuspend($args)
+    {
         $this->setup($args);
         $errors = array();
 
-        $theme = $this->getTheme($this->username);
-        if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
-        }
         $username = $args['package']['username'] ;
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=unsuspendreseller&username=$username";
 
         $response = $this->makeRequest('whm', $request);
 
-        if ( $response->status != 1 ) {
+        if ($response->status != 1) {
             $errors[] = $this->email_error('UnSuspension', $response->statusmsg, $args);
         }
 
-        if ( count($errors) > 0 ) {
-            CE_Lib::log(4, "plugin_whmphp::unsuspend::error: ".print_r($errors,true));
-            throw new CE_Exception ( $errors[0] );
+        if (count($errors) > 0) {
+            CE_Lib::log(4, "plugin_whmphp::unsuspend::error: ".print_r($errors, true));
+            throw new CE_Exception($errors[0]);
         }
 
         return;
     }
-    function suspend($args) {
+    function suspend($args)
+    {
         $this->setup($args);
         $errors = array();
 
-        $theme = $this->getTheme($this->username);
-        if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
-        }
         $username = $args['package']['username'];
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=suspendreseller&username=$username";
 
         $response = $this->makeRequest('whm', $request);
 
-        if ( $response->status != 1 ) {
+        if ($response->status != 1) {
             $errors[] = $this->email_error('Suspension', $response->statusmsg, $args);
         }
 
-        if ( count($errors) > 0 ) {
-            CE_Lib::log(4, "plugin_whmphp::suspend::error: ".print_r($errors,true));
-            throw new CE_Exception ( $errors[0] );
+        if (count($errors) > 0) {
+            CE_Lib::log(4, "plugin_whmphp::suspend::error: ".print_r($errors, true));
+            throw new CE_Exception($errors[0]);
         }
 
         return;
     }
 
-    function delete($args) {
+    function delete($args)
+    {
         $this->setup($args);
         $errors = array();
 
-        $theme = $this->getTheme($this->username);
-        if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
-        }
         $username = $args['package']['username'] ;
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=terminatereseller&username=$username";
 
         $response = $this->makeRequest('whm', $request);
 
-        if ( $response->status != 1 ) {
+        if ($response->status != 1) {
             $errors[] = $this->email_error('Delete', $response->statusmsg, $args);
         }
 
-        if ( count($errors) > 0 ) {
-            CE_Lib::log(4, "plugin_whmphp::delete::error: ".print_r($errors,true));
-            throw new CE_Exception ( $errors[0] );
+        if (count($errors) > 0) {
+            CE_Lib::log(4, "plugin_whmphp::delete::error: ".print_r($errors, true));
+            throw new CE_Exception($errors[0]);
         }
 
         return;
     }
 
-    function create($args) {
+    function create($args)
+    {
+
         $this->setup($args);
         $errors = array();
 
-        $theme = $this->getTheme($this->username);
-        if(!$theme)  {
-            throw new CE_Exception('Unable to get the cPanel theme. Please check the reseller owns his main account');
-        }
         $package = rawurlencode($args['package']['name_on_server']);
         $domain = $args['package']['domain_name'];
         $username = $args['package']['username'];
@@ -364,12 +359,10 @@ Class PluginWhmphp extends ServerPlugin {
         $request = "/cgi/whmphp/master/index.cgi?page=api&action=createreseller&domain=$domain&username=$username&email=$email&password=$password&package=$package";
 
         $response = $this->makeRequest('whm', $request);
-        if ( $response->status != 1 ) {
+        if ($response->status != 1) {
             $errors[] = $this->email_error('Creation', $response->statusmsg, $args);
-        }
-        else if ( $response->status == 1 ) {
-            if ( isset($args['package']['acl']['acl_diskspace']) && $args['package']['acl']['acl_diskspace'] > 0 ) {
-
+        } elseif ($response->status == 1) {
+            if (isset($args['package']['acl']['acl_diskspace']) && $args['package']['acl']['acl_diskspace'] > 0) {
                 $diskspace = $args['package']['acl']['acl_diskspace'];
                 $bandwidth = $args['package']['acl']['acl_bandwidth'];
                 $limit = $args['package']['acl']['acl_limit'];
@@ -380,15 +373,15 @@ Class PluginWhmphp extends ServerPlugin {
                 $request = "/cgi/whmphp/master/index.cgi?page=api&action=setlimit&username=$username&disk=$diskspace&band=$bandwidth&limit=$limit&ns1=$ns1&ns2=$ns2&oversell_disk=$oversellDisk&oversell_bw=$overSellBandwidth";
 
                 $response = $this->makeRequest('whm', $request);
-                if ( $response->status != 1 ) {
+                if ($response->status != 1) {
                     $errors[] = $this->email_error('Creation', $response->statusmsg, $args);
                 }
             }
         }
 
-        if ( count($errors) > 0 ) {
-            CE_Lib::log(4, "plugin_whmphp::create::error: ".print_r($errors,true));
-            throw new CE_Exception ( $errors[0] );
+        if (count($errors) > 0) {
+            CE_Lib::log(4, "plugin_whmphp::create::error: ".print_r($errors, true));
+            throw new CE_Exception($errors[0]);
         }
 
         return;
@@ -401,37 +394,31 @@ Class PluginWhmphp extends ServerPlugin {
         $auth = $this->username . ':' . $this->password;
 
         $data = NE_Network::curlRequest($this->settings, $url, false, false, true, false, false, $auth);
-        if ( $data instanceof CE_Error ) {
+        if ($data instanceof CE_Error) {
             $error = 'WHMPHP Error: ' . $data->errMessage;
             throw new CE_Exception($error);
         }
         $response = json_decode($data);
-        if ( !is_object($response) ) {
+        if (!is_object($response)) {
             // invalid json... check raw for an SSL error
-            if ( strpos($data, 'SSL encryption is required for access to this server') ) {
+            if (strpos($data, 'SSL encryption is required for access to this server')) {
                 CE_Lib::log(1, "Error from cPanel: SSL encryption is required for access to this server.");
-                throw new CE_Exception ('Error from cPanel: SSL encryption is required for access to this server.');
+                throw new CE_Exception('Error from cPanel: SSL encryption is required for access to this server.');
             }
             throw new CE_Exception("Cpanel call method: Invalid JSON please check your connection");
-        }
-        else if ( isset($response->data->result) && $response->data->result == 0 ) {
+        } elseif (isset($response->data->result) && $response->data->result == 0) {
             CE_Lib::log(4, 'cPanel Result: '.$response->data->reason);
             throw new CE_Exception("Cpanel returned an error: ".$response->data->reason);
-        }
-        else if ( isset($response->status) && $response->status == 0 ) {
+        } elseif (isset($response->status) && $response->status == 0) {
             CE_Lib::log(4, 'cPanel Status: '.$response->statusmsg);
             throw new CE_Exception("Cpanel returned an error: ".$response->statusmsg);
         }
         return $response;
     }
 
-	function getAccountSummary($user) {
-		$response = $this->makeRequest('whm', '/json-api/accountsummary?user=' . $user);
+    function getAccountSummary($user)
+    {
+        $response = $this->makeRequest('whm', '/json-api/accountsummary?user=' . $user);
         return $response;
-	}
-	
-    function getTheme($user) {
-        $response = $this->makeRequest('whm', '/json-api/accountsummary?user=' . $user);		
-        return $response->acct[0]->theme;
     }
 }
